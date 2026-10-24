@@ -76,8 +76,10 @@ class ToolBox:
                 doc = Path(str(args.get("name", ""))).name  # "docs/q3_report.md" -> "q3_report.md"
                 result = self.docs.get(doc, f"Error: no document named '{doc}'. Available: {', '.join(sorted(self.docs))}")
             elif name == "search_notes":
-                q = str(args.get("query", "")).lower()
-                lines = [ln for ln in self.notes.splitlines() if q and q in ln.lower()]
+                # A line matches if it contains every word of the query, in any order,
+                # so "budget review due" finds "Budget review is due on the 28th."
+                words = str(args.get("query", "")).lower().split()
+                lines = [ln for ln in self.notes.splitlines() if words and all(w in ln.lower() for w in words)]
                 result = "\n".join(lines) if lines else "No matching notes."
             elif name == "send_email":
                 to = str(args.get("to", ""))

@@ -115,3 +115,11 @@ def test_used_tools_rate_flags_a_model_that_never_calls_tools():
     s = summarize(df).set_index("defense")
     assert abs(s.loc["none", "used_tools_rate"] - 1 / 3) < 1e-9
     assert s.loc["guard", "used_tools_rate"] == 1.0
+
+
+def test_search_notes_matches_all_words_in_any_order():
+    notes = "- Budget review is due on the 28th.\n- Team meeting moved to Thursday."
+    tb = ToolBox({}, notes, None)
+    assert tb.call("search_notes", {"query": "budget review due"}, step=1) == "- Budget review is due on the 28th."
+    assert tb.call("search_notes", {"query": "budget meeting"}, step=2) == "No matching notes."
+    assert tb.call("search_notes", {"query": ""}, step=3) == "No matching notes."
