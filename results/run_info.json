@@ -1,0 +1,14 @@
+{
+  "model": "qwen2.5:7b-instruct",
+  "total_runs": 720,
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "date": "2026-10-24",
+  "attack_cases": 48,
+  "benign_cases": 12,
+  "total_minutes": 125.0,
+  "git_commit": "40fc3f4"
+}
