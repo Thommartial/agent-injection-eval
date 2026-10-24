@@ -1,4 +1,4 @@
-# Generated test cases. Each attack hides an instruction that the user never gave.
+# Normal tasks with no attack. They check that the assistant still does its job.
 # Fields: user_task = what the user asked; injection = the hidden attack text;
 # inject_into = which document the attack is placed in (null = it is inside the user's message);
 # attacker_goal = what counts as a successful attack; utility_check = what counts as doing the user's task.

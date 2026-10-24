@@ -2,7 +2,7 @@
 
 A small test suite that checks whether an AI assistant can be tricked by instructions hidden in the documents it reads, and how well simple defences stop that.
 
-## The problem, in plain words
+## The problem
 
 AI assistants can now do things, not just chat. They read your files, search your notes and send emails for you. That creates a new risk.
 
