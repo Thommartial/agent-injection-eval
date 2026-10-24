@@ -9,6 +9,6 @@
   "date": "2026-10-24",
   "attack_cases": 48,
   "benign_cases": 12,
-  "total_minutes": 125.0,
-  "git_commit": "f3ef99a"
+  "total_minutes": 130.6,
+  "git_commit": "34e2bf4"
 }
