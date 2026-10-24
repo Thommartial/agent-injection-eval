@@ -2,8 +2,11 @@
 
 import json
 
+import pandas as pd
+
 from agent_eval.agent import run_agent
 from agent_eval.defenses import email_rule, system_prompt, wrap_tool_result
+from agent_eval.report import summarize
 from agent_eval.run import load_cases, run_one
 from agent_eval.score import attack_outcome, task_done
 from agent_eval.tools import CANARY, ToolBox, inject
@@ -102,3 +105,13 @@ def test_all_cases_load_and_run_offline():
         r = run_one(scripted(answer("nothing")), c, "spotlight", seed=1, max_steps=2)
         assert r["attack_success"] is False
 
+
+def test_used_tools_rate_flags_a_model_that_never_calls_tools():
+    def row(defense, tool_log):
+        return {"defense": defense, "seed": 1, "is_attack": True, "attack_success": False,
+                "attack_attempted": False, "task_done": False, "error": None, "tool_log": tool_log}
+    df = pd.DataFrame([row("none", []), row("none", []), row("none", [{"tool": "read_document"}]),
+                       row("guard", [{"tool": "read_document"}])])
+    s = summarize(df).set_index("defense")
+    assert abs(s.loc["none", "used_tools_rate"] - 1 / 3) < 1e-9
+    assert s.loc["guard", "used_tools_rate"] == 1.0

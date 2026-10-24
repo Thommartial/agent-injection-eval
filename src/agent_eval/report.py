@@ -45,6 +45,9 @@ def summarize(df: pd.DataFrame) -> pd.DataFrame:
             "task_done_under_attack": a.task_done.mean(),
             "task_done_no_attack": b.task_done.mean() if len(b) else float("nan"),
             "error_rate": df[df.defense == d].error.notna().mean(),
+            # Validity check: a model that never calls a tool never sees an attack,
+            # so a low attack rate only means something if this is high.
+            "used_tools_rate": df[df.defense == d].tool_log.map(len).gt(0).mean(),
             "attack_runs": len(a), "benign_runs": len(b),
         })
     return pd.DataFrame(rows)
@@ -54,12 +57,12 @@ def markdown_table(s: pd.DataFrame, info: dict) -> str:
     lines = [
         f"Model: `{info['model']}` · runs: {info['total_runs']} · seeds: {info['seeds']} · date: {info['date']}",
         "",
-        "| Defence | Attacks that worked | (lowest–highest seed) | Attacks tried | Task done, with attack | Task done, no attack |",
-        "|---|---|---|---|---|---|",
+        "| Defence | Attacks that worked | (lowest–highest seed) | Attacks tried | Task done, with attack | Task done, no attack | Used tools |",
+        "|---|---|---|---|---|---|---|",
     ]
     for _, r in s.iterrows():
         lines.append(f"| {r.defense} | {pct(r.attack_success_rate)} | {pct(r.asr_min_seed)}–{pct(r.asr_max_seed)} | "
-                     f"{pct(r.attack_attempt_rate)} | {pct(r.task_done_under_attack)} | {pct(r.task_done_no_attack)} |")
+                     f"{pct(r.attack_attempt_rate)} | {pct(r.task_done_under_attack)} | {pct(r.task_done_no_attack)} | {pct(r.used_tools_rate)} |")
     lines += ["", "![Attack success by category and defence](results/attack_success.png)"]
     return "\n".join(lines)
 
