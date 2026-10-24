@@ -1,0 +1,16 @@
+# Which model to test. Any OpenAI-compatible server works.
+#
+# Local and free with Ollama (default):
+base_url: http://localhost:11434/v1
+model: qwen2.5:7b-instruct
+api_key_env: null            # no key needed for Ollama
+#
+# OpenAI instead (costs money; set the key in your shell, never in this file):
+# base_url: https://api.openai.com/v1
+# model: gpt-4o-mini
+# api_key_env: OPENAI_API_KEY
+
+temperature: 0.7             # above 0 so the three seeds can differ
+seeds: [1, 2, 3]
+max_steps: 8                 # the agent gives up after 8 rounds of tool use
+defenses: [none, warn, spotlight, guard]

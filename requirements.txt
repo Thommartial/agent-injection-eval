@@ -1,0 +1,5 @@
+openai>=1.40
+pyyaml>=6.0
+pandas>=2.1
+matplotlib>=3.7
+pytest>=7
