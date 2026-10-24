@@ -10,5 +10,5 @@
   "attack_cases": 48,
   "benign_cases": 12,
   "total_minutes": 125.0,
-  "git_commit": "40fc3f4"
+  "git_commit": "f3ef99a"
 }
